@@ -31,6 +31,19 @@ podman run --device nvidia.com/gpu=all --rm nvidia/cuda:12.2.0-devel-rockylinux9
 - Run `./download_allen.sh` to download the upstream Allen repository into the
   `Allen/` directory. The script exits early with a message when the folder
   already exists.
+- Run 
+
+```bash
+podman build -t green-allen-build:latest .
+podman run --rm -it --gpus all -v "$PWD":/workspace -w /workspace green-allen-build:latest nvidia-smi
+podman run --rm -it --userns=keep-id:uid=1000,gid=1000 --gpus all -v "$PWD":/workspace:Z -w /workspace green-allen-build:latest bash
+```
+
+```bash
+docker build -t green-allen-build:latest .
+docker run --rm -it --gpus all -v "$PWD":/workspace -w /workspace green-allen-build:latest nvidia-smi
+docker run --rm -it --gpus all -v "$PWD":/workspace -w /workspace green-allen-build:latest bash
+```
 
 ## Plan
 
