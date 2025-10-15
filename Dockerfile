@@ -2,28 +2,22 @@ FROM nvidia/cuda:12.2.0-devel-rockylinux9
 RUN dnf install 'dnf-command(config-manager)' -y && dnf config-manager --enable crb -y && dnf install epel-release -y 
 RUN dnf upgrade -y
 RUN dnf install git cmake clang-devel llvm-devel json-devel zeromq-devel zlib-devel root\* python3-pip tbb-devel zip unzip lbzip2 -y
-RUN dnf install boost-devel fmt-devel python3-devel catch2-devel range-v3-devel -y
-RUN pip install wrapt cachetools pydot sympy clang==15.0.7
-RUN ln -s /usr/lib64/libclang.so.15.0.7 /usr/lib64/libclang-15.so
+RUN dnf install boost-devel fmt-devel python3-devel catch2-devel range-v3-devel python3-clang -y
+RUN pip install wrapt cachetools pydot sympy clang==18.1.8
+RUN ln -s /usr/bin/python3.9 /usr/bin/python
 
 RUN mkdir deps
 WORKDIR /deps
 
+RUN git clone https://github.com/edanor/umesimd.git 
+ENV UMESIMD_ROOT_DIR=/deps/
+
 RUN git clone https://github.com/microsoft/GSL.git &&\
     cd GSL &&\
+    git checkout v3.1.0 &&\
     mkdir build && cd build &&\
     cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GMOCK=OFF -DGSL_TEST=OFF -DINSTALL_GTEST=OFF .. &&\
     make -j && make install
-
-RUN git clone https://github.com/catchorg/Catch2.git &&\
-    cd Catch2 &&\
-    mkdir build && cd build &&\
-    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATCH_INSTALL_DOCS=OFF -DCATCH_INSTALL_EXTRAS=OFF .. &&\
-    make -j && make install
-
-RUN git clone https://gitlab.cern.ch/lhcb/Gaudi.git
-RUN git clone https://gitlab.cern.ch/lhcb/LHCb.git
-RUN git clone https://gitlab.cern.ch/lhcb-datapkg/ParamFiles.git
 
 RUN dnf install ninja-build bash-completion -y
 
