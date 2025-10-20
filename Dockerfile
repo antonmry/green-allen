@@ -3,7 +3,7 @@ RUN dnf install 'dnf-command(config-manager)' -y && dnf config-manager --enable 
 RUN dnf upgrade -y
 RUN dnf install git cmake clang-devel llvm-devel json-devel zeromq-devel zlib-devel python3-pip tbb-devel zip unzip lbzip2 -y
 RUN dnf install boost-devel fmt-devel python3-devel catch2-devel range-v3-devel python3-clang -y
-RUN pip install wrapt cachetools pydot sympy clang==18.1.8
+RUN pip install wrapt cachetools pydot sympy clang==18.1.8 pyeda
 RUN ln -s /usr/bin/python3.9 /usr/bin/python
 
 RUN mkdir deps

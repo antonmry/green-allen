@@ -62,13 +62,24 @@ cmake -DSTANDALONE=ON ..
 make
 ```
 
+## Run Allen
+
+Inside the container, run in `Allen/build` following the [Run Allen official
+documentation](https://allen-doc.docs.cern.ch/setup/run_allen.html#standalone-allen)
+with the following command:
+
+```bash
+./Allen --sequence hlt1_pp_default --mdf ../input/minbias/mdf/MiniBrunel_2018_MinBias_FTv4_DIGI_retinacluster_v1.mdf
+```
+
 ## Plan
 
 - [x] Build local environment using Docker/Podman
-- [ ] Run a program in Allen following
+- [x] Run a program in Allen following
       [the official documentation](https://allen-doc.docs.cern.ch/setup/run_allen.html#standalone-allen)
 - [ ] Add Github Actions to validate the build is working as expected after
       introducing changes
+- [ ] Build Allen with GPU support and test it
 - [ ] Add proper monitoring for
       [performance following Allen documentation](https://allen-doc.docs.cern.ch/setup/performance.html#scripts-for-standalone-allen)
 - [ ] Consider adding
