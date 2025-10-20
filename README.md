@@ -28,7 +28,7 @@ podman run --device nvidia.com/gpu=all --rm nvidia/cuda:12.2.0-devel-rockylinux9
 
 ## Setup
 
-Run `./download_allen.sh` to download the upstream Allen repository into the
+Run `./scripts/download_allen.sh` to download the upstream Allen repository into the
 `Allen/` directory. The script exits early with a message when the folder
 already exists.
 
@@ -71,6 +71,27 @@ with the following command:
 ```bash
 ./Allen --sequence hlt1_pp_default --mdf ../input/minbias/mdf/MiniBrunel_2018_MinBias_FTv4_DIGI_retinacluster_v1.mdf
 ```
+
+### Longer standalone runs without external datasets
+
+The bundled MDF above only contains 10 events. To stress the pipeline for longer without fetching extra inputs, run the helper script (from the repository root):
+
+```bash
+python3 scripts/prepare_long_run.py --repeat-count 20
+```
+
+This produces:
+- `Allen/build/mdf_repeat.lst` pointing to the same MDF multiple times (reconfigure `--repeat-count` to scale the workload).
+- `Allen/input/detector_configuration/magfield.bin`, a minimal zero-field grid that keeps standalone Allen running when the real field map is unavailable. Pass `--force` to overwrite existing files.
+
+Then launch a longer test (adjust repetitions/threads as needed):
+
+```bash
+./Allen --sequence hlt1_pp_default --mdf mdf_repeat.lst \
+        -g ../input/detector_configuration -t 4 --events-per-slice 1000 -r 200 -v 3
+```
+
+The synthetic `magfield.bin` is only for throughput or regression checks. Replace it with the real field map (e.g., from `/cvmfs/lhcb.cern.ch/lib/lhcb/DBASE/FieldMap/...`) before running physics validation studies.
 
 ## Plan
 
