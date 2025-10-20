@@ -32,7 +32,10 @@ Run `./download_allen.sh` to download the upstream Allen repository into the
 `Allen/` directory. The script exits early with a message when the folder
 already exists.
 
-Build the image and exec bash on it.
+Build the image and exec bash on it. Note that
+[root](https://github.com/root-project/root) is downloaded and compiled during
+the building process to use C++20 (required by Allen) and the build process
+will take significant time.
 
 With Podman/Fedora:
 
@@ -59,16 +62,9 @@ cmake -DSTANDALONE=ON ..
 make
 ```
 
-## Current status
-
-The `make` command currently fails because the latest Gaudi sources require
-C++20 concepts while Allen configures the build for C++17. Pin the external
-projects to C++17-compatible tags or update Allen's build configuration to use
-C++20 before retrying.
-
 ## Plan
 
-- [ ] Build local environment using Docker/Podman
+- [x] Build local environment using Docker/Podman
 - [ ] Run a program in Allen following
       [the official documentation](https://allen-doc.docs.cern.ch/setup/run_allen.html#standalone-allen)
 - [ ] Add Github Actions to validate the build is working as expected after

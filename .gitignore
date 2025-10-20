@@ -33,6 +33,7 @@ notebooks/.ipynb_checkpoints/
 # IA
 AGENT.md
 AGENTS.md
+Dockerfile.codex
 
 # Tests
 out/
