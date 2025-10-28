@@ -9,10 +9,10 @@ RUN dnf upgrade -y
 RUN dnf install git cmake clang-devel llvm-devel json-devel zeromq-devel zlib-devel python3-pip tbb-devel zip unzip lbzip2 cpio -y
 RUN dnf install boost-devel fmt-devel python3-devel catch2-devel range-v3-devel python3-clang -y
 
-# Modern GCC/libstdc++ for C++20 ranges (Allen GPU build requirement)
-RUN dnf install gcc-toolset-13 gcc-toolset-13-gcc gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel gcc-toolset-13-runtime -y
+# Modern GCC/libstdc++ compatible with CUDA 12.2 (Allen GPU build requirement)
+RUN dnf install gcc-toolset-12 gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-libstdc++-devel gcc-toolset-12-runtime -y
 
-ENV GCC_TOOLSET_ROOT=/opt/rh/gcc-toolset-13/root
+ENV GCC_TOOLSET_ROOT=/opt/rh/gcc-toolset-12/root
 ENV PATH="${GCC_TOOLSET_ROOT}/usr/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${GCC_TOOLSET_ROOT}/usr/lib64:${LD_LIBRARY_PATH}"
 ENV LIBRARY_PATH="${GCC_TOOLSET_ROOT}/usr/lib64:${LIBRARY_PATH}"
