@@ -1,8 +1,25 @@
 FROM nvidia/cuda:12.2.0-devel-rockylinux9
-RUN dnf install 'dnf-command(config-manager)' -y && dnf config-manager --enable crb -y && dnf install epel-release -y 
+
+RUN dnf install 'dnf-command(config-manager)' -y \
+ && dnf config-manager --enable crb -y \
+ && dnf install epel-release -y
+
 RUN dnf upgrade -y
-RUN dnf install git cmake clang-devel llvm-devel json-devel zeromq-devel zlib-devel python3-pip tbb-devel zip unzip lbzip2 -y
+
+RUN dnf install git cmake clang-devel llvm-devel json-devel zeromq-devel zlib-devel python3-pip tbb-devel zip unzip lbzip2 cpio -y
 RUN dnf install boost-devel fmt-devel python3-devel catch2-devel range-v3-devel python3-clang -y
+
+# Modern GCC/libstdc++ for C++20 ranges (Allen GPU build requirement)
+RUN dnf install gcc-toolset-13 gcc-toolset-13-gcc gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel gcc-toolset-13-runtime -y
+
+ENV GCC_TOOLSET_ROOT=/opt/rh/gcc-toolset-13/root
+ENV PATH="${GCC_TOOLSET_ROOT}/usr/bin:${PATH}"
+ENV LD_LIBRARY_PATH="${GCC_TOOLSET_ROOT}/usr/lib64:${LD_LIBRARY_PATH}"
+ENV LIBRARY_PATH="${GCC_TOOLSET_ROOT}/usr/lib64:${LIBRARY_PATH}"
+ENV CPATH="${GCC_TOOLSET_ROOT}/usr/include:${CPATH}"
+ENV CC="${GCC_TOOLSET_ROOT}/usr/bin/gcc"
+ENV CXX="${GCC_TOOLSET_ROOT}/usr/bin/g++"
+
 RUN pip install wrapt cachetools pydot sympy clang==18.1.8 pyeda
 RUN ln -s /usr/bin/python3.9 /usr/bin/python
 
