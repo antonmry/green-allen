@@ -133,11 +133,17 @@ cd Allen/build_cuda
 For sustained workloads without external datasets, reuse the helper script and point Allen to the generated list:
 
 ```bash
-python3 scripts/prepare_long_run.py --repeat-count 20
+# regenerate the repeat list relative to build_cuda and keep the magfield alongside the inputs
+python3 scripts/prepare_long_run.py \
+  --build-dir Allen/build_cuda \
+  --mdf-path Allen/input/minbias/mdf/MiniBrunel_2018_MinBias_FTv4_DIGI_retinacluster_v1.mdf \
+  --repeat-file mdf_repeat.lst \
+  --magfield-path Allen/input/detector_configuration/magfield.bin \
+  --force
 
 source /opt/rh/gcc-toolset-13/enable
 cd Allen/build_cuda
-./Allen --sequence hlt1_pp_default --mdf ../build/mdf_repeat.lst \
+./Allen --sequence hlt1_pp_default --mdf mdf_repeat.lst \
         --params external/ParamFiles \
         -g ../input/detector_configuration -t 4 --events-per-slice 1000 -r 200 -v 3
 ```
