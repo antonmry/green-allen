@@ -139,6 +139,7 @@ python3 scripts/prepare_long_run.py \
   --mdf-path Allen/input/minbias/mdf/MiniBrunel_2018_MinBias_FTv4_DIGI_retinacluster_v1.mdf \
   --repeat-file mdf_repeat.lst \
   --magfield-path Allen/input/detector_configuration/magfield.bin \
+  --repeat-count 200 \
   --force
 
 source /opt/rh/gcc-toolset-13/enable
@@ -146,6 +147,8 @@ cd Allen/build_cuda
 ./Allen --sequence hlt1_pp_default --mdf mdf_repeat.lst \
         --params external/ParamFiles \
         -g ../input/detector_configuration -t 4 --events-per-slice 1000 -r 200 -v 3
+
+# for even longer runs, increase --repeat-count above and/or raise --events-per-slice and -r
 ```
 
 ## Plan
